@@ -2,6 +2,7 @@ package com.jayfox.wigell_padel.services;
 
 import com.jayfox.wigell_padel.entities.Booking;
 import com.jayfox.wigell_padel.repositories.BookingRepository;
+import com.jayfox.wigell_padel.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,14 @@ import java.util.Optional;
 public class BookingService implements BookingServiceInterface{
     @Autowired
     private BookingRepository bookingRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Override
-    public String createNewBooking(Booking booking) {
-        bookingRepository.save(booking);
-        return "New booking created";
+    public Booking createNewBooking(Booking booking, String username) {
+        booking.setCustomer(customerRepository.findByUserName(username));
+        return bookingRepository.save(booking);
+
     }
 
     @Override
@@ -33,10 +37,13 @@ public class BookingService implements BookingServiceInterface{
     }
 
     @Override
-    public String updateBooking(long id,Booking booking) {
+    public Booking updateBooking(long id,Booking booking,String username) {
         Optional<Booking> existingBooking = bookingRepository.findById(id);
         if(existingBooking.isPresent()){
             Booking bookingToUpdate = existingBooking.get();
+            if(!booking.getCustomer().getUserName().equals(username)){
+                return null;
+            }
             if(booking.getCustomer()!=null){
                 bookingToUpdate.setCustomer(booking.getCustomer());
             }
@@ -44,12 +51,13 @@ public class BookingService implements BookingServiceInterface{
                 bookingToUpdate.setVenue(booking.getVenue());
             }
             bookingToUpdate.setPrice(booking.getPrice());
-            bookingToUpdate.setStartDate(booking.getStartDate());
-            bookingToUpdate.setEndDate(booking.getEndDate());
+            bookingToUpdate.setDate(booking.getDate());
+            bookingToUpdate.setStartTime(booking.getStartTime());
+            bookingToUpdate.setEndTime(booking.getEndTime());
             bookingToUpdate.setTotalPlayers(booking.getTotalPlayers());
             bookingRepository.save(bookingToUpdate);
-            return "Booking updated";
+            return bookingToUpdate;
         }
-        return "Failed, couldn't find booking with supplied id";
+        return null;
     }
 }

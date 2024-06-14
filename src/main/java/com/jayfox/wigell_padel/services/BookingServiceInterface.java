@@ -12,11 +12,11 @@ public interface BookingServiceInterface {
 
 
 //• Boka tid POST /api/v5/booking
-String createNewBooking(Booking booking);
+Booking createNewBooking(Booking booking, String username);
 //• Se tidigare och aktiva bokningar GET /api/v5/mybookings
 List<Booking> getMyBookings(String username);
     //• Uppdatera bokning PUT /api/v5/bookings/{id}
-String updateBooking(long id,Booking booking);
+Booking updateBooking(long id,Booking booking,String username);
 
 
 

@@ -15,7 +15,13 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    //Lista lediga tider GET /api/v5/availability
+
+    @PostMapping("/booking")
+    public Booking createBooking(@RequestBody Booking booking){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return bookingService.createNewBooking(booking, username);
+    }
 //• Boka tid POST /api/v5/booking
 //• Se tidigare och aktiva bokningar GET /api/v5/mybookings
     @GetMapping("/mybookings")
@@ -25,8 +31,10 @@ public class BookingController {
         return bookingService.getMyBookings(username);
     }
     @PutMapping("/bookings/{id}")
-    public String updateBooking(@PathVariable("id") long id,@RequestBody Booking booking){
-        return bookingService.updateBooking(id,booking);
+    public Booking updateBooking(@PathVariable("id") long id,@RequestBody Booking booking){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return bookingService.updateBooking(id,booking,username);
 
     }
 //• Uppdatera bokning PUT /api/v5/bookings/{id}

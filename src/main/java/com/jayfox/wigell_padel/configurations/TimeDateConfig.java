@@ -1,3 +1,4 @@
+/*
 package com.jayfox.wigell_padel.configurations;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -26,3 +27,4 @@ public class TimeDateConfig {
     }
 }
 
+*/

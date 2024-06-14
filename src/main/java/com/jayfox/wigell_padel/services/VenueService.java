@@ -7,6 +7,7 @@ import com.jayfox.wigell_padel.repositories.VenueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -49,13 +50,48 @@ public class VenueService implements VenueServiceInterface{
             venueToUpdate.setName(venue.getName());
             venueToUpdate.setLocation(venue.getLocation());
             venueToUpdate.setFieldType(venue.getFieldType());
+            venueToUpdate.setOpeningTime(venue.getOpeningTime());
+            venueToUpdate.setClosingTime(venue.getClosingTime());
             venueRepository.save(venueToUpdate);
             return "Venue with id: "+venue.getId()+" updated";
         }
         return "Failed to find venue with supplied id";
     }
+    public List<String> getAvailableHours(Long venueId, LocalDate date) {
+        Venue venue = venueRepository.findById(venueId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid venue ID"));
 
-    public List<String> getAvailableHours(Long venueId, LocalDateTime date) {
+        LocalTime openingTime = venue.getOpeningTime();
+        LocalTime closingTime = venue.getClosingTime();
+
+        // Retrieve bookings for the venue on the given date
+        List<Booking> bookings = bookingRepository.findBookingsForVenueAndDate(venue, date);
+
+        // Generate all possible booking slots within the opening hours
+        List<LocalTime> allSlots = new ArrayList<>();
+        LocalTime currentTime = openingTime;
+        while (!currentTime.isAfter(closingTime.minusHours(1))) {
+            allSlots.add(currentTime);
+            currentTime = currentTime.plusHours(1);
+        }
+
+        // Filter out slots that are already booked
+        for (Booking booking : bookings) {
+            LocalTime bookedSlot = booking.getStartTime();
+            while (!bookedSlot.isAfter(booking.getEndTime().minusHours(1))) {
+                allSlots.remove(bookedSlot);
+                bookedSlot = bookedSlot.plusHours(1);
+            }
+        }
+
+        List<String> availableSlots = allSlots.stream()
+                .map(LocalTime::toString)
+                .collect(Collectors.toList());
+
+        return availableSlots;
+    }
+
+    /*public List<String> getAvailableHours(Long venueId, LocalDateTime date) {
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid venue ID"));
 
@@ -85,5 +121,5 @@ public class VenueService implements VenueServiceInterface{
                 .collect(Collectors.toList());
 
         return availableSlots;
-    }
+    }*/
 }

@@ -1,10 +1,13 @@
 package com.jayfox.wigell_padel.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 public class Booking {
@@ -16,15 +19,23 @@ public class Booking {
     @JsonIgnoreProperties(value ="booking")
     @JoinColumn(referencedColumnName = "id")
     private Venue venue;
-    @Column(name = "start_date", columnDefinition = "TIMESTAMP")
-    private LocalDateTime startDate;
-    @Column(name = "end_date", columnDefinition = "TIMESTAMP")
-    private LocalDateTime endDate;
+
+    private LocalDate date;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime startTime;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime endTime;
     private int totalPlayers;
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value="listOfBookings")
     @JoinColumn(referencedColumnName = "id")
     private Customer customer;
+
+    /* @Column(name = "start_date", columnDefinition = "TIMESTAMP")
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date", columnDefinition = "TIMESTAMP")
+    private LocalDateTime endDate;*/
 
 
     public Booking(){}
@@ -54,7 +65,7 @@ public class Booking {
         this.venue = venue;
     }
 
-    public LocalDateTime getStartDate() {
+    /*public LocalDateTime getStartDate() {
         return startDate;
     }
 
@@ -68,7 +79,7 @@ public class Booking {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
-    }
+    }*/
 
     public int getTotalPlayers() {
         return totalPlayers;
@@ -84,5 +95,29 @@ public class Booking {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 }

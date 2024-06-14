@@ -7,7 +7,9 @@ import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class VenueController {
     }
     //    Lägga till bana POST /api/v5/addfield
 
-    @DeleteMapping("deletefield/{id}")
+    @DeleteMapping("/deletefield/{id}")
     public String deleteVenue(@PathVariable("id")long id){
         return venueService.removeVenue(id);
     }
@@ -37,8 +39,8 @@ public class VenueController {
 //• Uppdatera information för bana PUT /api/v5/updateinfo
 
     @GetMapping("/availability")
-    public List<String> getVenueAvailability(@RequestBody Venue venue) {
-        LocalDateTime dateTime = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        return venueService.getAvailableHours(venue.getId(), dateTime);
+    public List<String> getVenueAvailability(@RequestBody Venue venue, @RequestParam String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        return venueService.getAvailableHours(venue.getId(), localDate);
     }
 }
