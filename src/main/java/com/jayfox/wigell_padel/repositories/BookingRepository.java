@@ -17,19 +17,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByVenueAndDate(Venue venue, LocalDate date);
     @Query("SELECT b FROM Booking b WHERE b.venue = :venue AND b.date = :date")
     List<Booking> findBookingsForVenueAndDate(@Param("venue") Venue venue, @Param("date") LocalDate date);
-    /*@Query("SELECT b FROM Booking b WHERE b.venue = :venue AND " +
-            "((b.startDate < :endDate AND b.endDate > :startDate))")
-    List<Booking> findOverlappingBookings(@Param("venue") Venue venue,
-                                          @Param("startDate") LocalDateTime startDate,
-                                          @Param("endDate") LocalDateTime endDate);*/
+
 }
 
 
-    /*@Query("SELECT b FROM Booking b WHERE b.venue = :venue AND " +
-            "((b.startDate <= :endDate AND b.endDate >= :startDate))")
-    List<Booking> findOverlappingBookings(@Param("venue") Venue venue,
-                                          @Param("startDate") LocalDateTime startDate,
-                                          @Param("endDate") LocalDateTime endDate);*/
+
 
 
 

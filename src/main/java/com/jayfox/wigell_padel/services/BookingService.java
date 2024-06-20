@@ -34,26 +34,14 @@ public class BookingService implements BookingServiceInterface{
         booking.setCustomer(customerRepository.findByUserName(username));
         logger.log(Level.WARN,"New booking created");
         return bookingRepository.save(booking);
-
     }
 
-    /*@Override
-    public List<Booking> getMyBookings(String username) {
-        List<Booking> bookingList = bookingRepository.findAll();
-        List<Booking> listToReturn = new ArrayList<>();
-        for (Booking booking : bookingList){
-            if (booking.getCustomer().getUserName().equals(username)){
-                listToReturn.add(booking);
-            }
-        }
-        return listToReturn;
-    }*/
     @Override
     public List<BookingVO> getMyBookings(String username) {
         List<Booking> bookingList = bookingRepository.findAll();
         List<BookingVO> listToReturn = new ArrayList<>();
 
-        // Fetch the exchange rates
+
         ResponseEntity<Map> response = restTemplate.getForEntity(EXCHANGE_RATE_API_URL, Map.class);
         Map<String, Object> body = response.getBody();
         Map<String, Double> conversionRates = (Map<String, Double>) body.get("conversion_rates");

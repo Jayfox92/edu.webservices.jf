@@ -1,6 +1,6 @@
 package com.jayfox.wigell_padel.configurations;
 
-import com.jayfox.wigell_padel.entities.Customer;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;

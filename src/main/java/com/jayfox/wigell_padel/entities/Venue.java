@@ -21,7 +21,6 @@ public class Venue {
     private LocalTime closingTime;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venue")
     @JsonIgnoreProperties(value = "venue")
-    //@JoinColumn(referencedColumnName = "id")
     private List<Booking> booking;
 
     public Venue(){}

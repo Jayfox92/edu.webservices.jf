@@ -23,8 +23,7 @@ public class BookingController {
         String username = authentication.getName();
         return bookingService.createNewBooking(booking, username);
     }
-//• Boka tid POST /api/v5/booking
-//• Se tidigare och aktiva bokningar GET /api/v5/mybookings
+
     @GetMapping("/mybookings")
     public List<BookingVO> myBookings(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,7 +35,6 @@ public class BookingController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return bookingService.updateBooking(id,booking,username);
-
     }
-//• Uppdatera bokning PUT /api/v5/bookings/{id}
+
 }

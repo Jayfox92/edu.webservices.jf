@@ -31,13 +31,6 @@ public class Booking {
 
     private int priceSek;
 
-    /* @Column(name = "start_date", columnDefinition = "TIMESTAMP")
-    private LocalDateTime startDate;
-
-    @Column(name = "end_date", columnDefinition = "TIMESTAMP")
-    private LocalDateTime endDate;*/
-
-
     public Booking(){}
 
 
@@ -64,22 +57,6 @@ public class Booking {
     public void setVenue(Venue venue) {
         this.venue = venue;
     }
-
-    /*public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }*/
 
     public int getTotalPlayers() {
         return totalPlayers;

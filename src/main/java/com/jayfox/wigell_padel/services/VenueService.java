@@ -72,10 +72,9 @@ public class VenueService implements VenueServiceInterface{
         LocalTime openingTime = venue.getOpeningTime();
         LocalTime closingTime = venue.getClosingTime();
 
-        // Retrieve bookings for the venue on the given date
         List<Booking> bookings = bookingRepository.findBookingsForVenueAndDate(venue, date);
 
-        // Generate all possible booking slots within the opening hours
+
         List<LocalTime> allSlots = new ArrayList<>();
         LocalTime currentTime = openingTime;
         while (!currentTime.isAfter(closingTime.minusHours(1))) {
@@ -83,7 +82,7 @@ public class VenueService implements VenueServiceInterface{
             currentTime = currentTime.plusHours(1);
         }
 
-        // Filter out slots that are already booked
+
         for (Booking booking : bookings) {
             LocalTime bookedSlot = booking.getStartTime();
             while (!bookedSlot.isAfter(booking.getEndTime().minusHours(1))) {
@@ -99,35 +98,4 @@ public class VenueService implements VenueServiceInterface{
         return availableSlots;
     }
 
-    /*public List<String> getAvailableHours(Long venueId, LocalDateTime date) {
-        Venue venue = venueRepository.findById(venueId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid venue ID"));
-
-        LocalDateTime openingTime = date.with(LocalTime.of(11, 0));
-        LocalDateTime closingTime = date.with(LocalTime.of(15, 0));
-
-        // Retrieve bookings for the venue on the given date
-        List<Booking> bookings = bookingRepository.findOverlappingBookings(
-                venue, openingTime, closingTime);
-
-        // Generate all possible booking slots within the opening hours
-        List<LocalTime> allSlots = new ArrayList<>();
-        LocalTime currentTime = openingTime.toLocalTime();
-        while (!currentTime.isAfter(closingTime.toLocalTime().minusHours(1))) {
-            allSlots.add(currentTime);
-            currentTime = currentTime.plusHours(1);
-        }
-
-        // Filter out slots that are already booked
-        List<LocalTime> bookedSlots = bookings.stream()
-                .map(booking -> booking.getStartDate().toLocalTime())
-                .collect(Collectors.toList());
-
-        List<String> availableSlots = allSlots.stream()
-                .filter(slot -> !bookedSlots.contains(slot))
-                .map(slot -> slot.format(TIME_FORMATTER))
-                .collect(Collectors.toList());
-
-        return availableSlots;
-    }*/
 }
