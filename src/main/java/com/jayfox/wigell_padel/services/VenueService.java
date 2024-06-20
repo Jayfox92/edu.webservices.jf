@@ -2,19 +2,21 @@ package com.jayfox.wigell_padel.services;
 
 import com.jayfox.wigell_padel.entities.Booking;
 import com.jayfox.wigell_padel.entities.Venue;
+import com.jayfox.wigell_padel.exceptions.ResourceNotFoundException;
 import com.jayfox.wigell_padel.repositories.BookingRepository;
 import com.jayfox.wigell_padel.repositories.VenueRepository;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 @Service
 public class VenueService implements VenueServiceInterface{
@@ -24,24 +26,29 @@ public class VenueService implements VenueServiceInterface{
     private BookingRepository bookingRepository;
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
+    Logger logger = Logger.getLogger(VenueService.class);
+
 
     @Override
-    public String addVenue(Venue venue) {
+    public Venue addVenue(Venue venue) {
         venueRepository.save(venue);
-        return "Venue created";
+        logger.log(Level.WARN,"Venue created");
+        return venue;
+
     }
 
     @Override
-    public String removeVenue(long id) {
+    public void removeVenue(long id) {
         if(venueRepository.findById(id).isPresent()){
             venueRepository.deleteById(id);
-            return "Venue with id "+id+" deleted";
-        }
-        return "Failed, couldn't find venue with that id";
+            logger.log(Level.WARN,"Venue with id "+id+" deleted");
+
+        } else throw new ResourceNotFoundException("venue","id", id);
+
     }
 
     @Override
-    public String updateVenue(Venue venue) {
+    public Venue updateVenue(Venue venue) {
         if(venueRepository.findById(venue.getId()).isPresent()){
             Venue venueToUpdate = venueRepository.findById(venue.getId()).get();
             if(venue.getBooking()!=null){
@@ -53,13 +60,14 @@ public class VenueService implements VenueServiceInterface{
             venueToUpdate.setOpeningTime(venue.getOpeningTime());
             venueToUpdate.setClosingTime(venue.getClosingTime());
             venueRepository.save(venueToUpdate);
-            return "Venue with id: "+venue.getId()+" updated";
-        }
-        return "Failed to find venue with supplied id";
+            logger.log(Level.WARN,"Venue with id "+venue.getId()+" updated");
+            return venueToUpdate;
+        } else throw new ResourceNotFoundException("venue","id",venue.getId());
+
     }
     public List<String> getAvailableHours(Long venueId, LocalDate date) {
         Venue venue = venueRepository.findById(venueId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid venue ID"));
+                .orElseThrow(() -> new ResourceNotFoundException("venue","id",venueId));
 
         LocalTime openingTime = venue.getOpeningTime();
         LocalTime closingTime = venue.getClosingTime();

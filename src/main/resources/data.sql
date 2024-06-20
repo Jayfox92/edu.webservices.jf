@@ -13,10 +13,10 @@ VALUES ('venue1','venue1location','indoors','11:00','15:00'),
        ('venue3','venue3location','outdoors','09:00','18:00');
 
 
-INSERT INTO Booking (price,date,start_time,end_time,total_players,customer_id,venue_id)
-    VALUES (100,'2024-06-14','12:00','15:00','4',1,1),
-           (100,'2024-06-14','11:00','13:00','2',2,2),
-           (100,'2024-06-14','11:00','16:00','2',2,3);
+INSERT INTO Booking (price_sek,date,start_time,end_time,total_players,customer_id,venue_id)
+    VALUES (300,'2024-06-14','12:00','15:00','4',1,1),
+           (200,'2024-06-14','11:00','13:00','2',2,2),
+           (500,'2024-06-14','11:00','16:00','2',2,3);
            --(,'','','',''),
            --(,'','','','');
 

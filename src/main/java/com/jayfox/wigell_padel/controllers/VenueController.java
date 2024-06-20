@@ -5,6 +5,7 @@ import com.jayfox.wigell_padel.services.BookingService;
 import com.jayfox.wigell_padel.services.VenueService;
 import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -21,19 +22,20 @@ public class VenueController {
 
 
     @PostMapping("/addfield")
-    public String addVenue(@RequestBody Venue venue){
+    public Venue addVenue(@RequestBody Venue venue){
 
         return venueService.addVenue(venue);
     }
     //    Lägga till bana POST /api/v5/addfield
 
     @DeleteMapping("/deletefield/{id}")
-    public String deleteVenue(@PathVariable("id")long id){
-        return venueService.removeVenue(id);
+    public ResponseEntity<String> deleteVenue(@PathVariable("id")long id){
+         venueService.removeVenue(id);
+         return ResponseEntity.ok("Venue deleted");
     }
 //• Ta bort en bana DELETE /api/v5/deletefield/{id}
     @PutMapping("/updateinfo")
-    public String updateVenue(@RequestBody Venue venue){
+    public Venue updateVenue(@RequestBody Venue venue){
         return venueService.updateVenue(venue);
     }
 //• Uppdatera information för bana PUT /api/v5/updateinfo

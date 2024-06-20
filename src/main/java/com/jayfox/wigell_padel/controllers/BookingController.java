@@ -1,5 +1,6 @@
 package com.jayfox.wigell_padel.controllers;
 
+import com.jayfox.wigell_padel.BookingVO;
 import com.jayfox.wigell_padel.entities.Booking;
 import com.jayfox.wigell_padel.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class BookingController {
 //• Boka tid POST /api/v5/booking
 //• Se tidigare och aktiva bokningar GET /api/v5/mybookings
     @GetMapping("/mybookings")
-    public List<Booking> myBookings(){
+    public List<BookingVO> myBookings(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return bookingService.getMyBookings(username);

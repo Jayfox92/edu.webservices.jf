@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -14,7 +12,7 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private int price;
+
     @ManyToOne
     @JsonIgnoreProperties(value ="booking")
     @JoinColumn(referencedColumnName = "id")
@@ -30,6 +28,8 @@ public class Booking {
     @JsonIgnoreProperties(value="listOfBookings")
     @JoinColumn(referencedColumnName = "id")
     private Customer customer;
+
+    private int priceSek;
 
     /* @Column(name = "start_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime startDate;
@@ -49,12 +49,12 @@ public class Booking {
         this.id = id;
     }
 
-    public int getPrice() {
-        return price;
+    public int getPriceSek() {
+        return priceSek;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setPriceSek(int price) {
+        this.priceSek = price;
     }
 
     public Venue getVenue() {

@@ -7,10 +7,10 @@ public interface VenueServiceInterface {
     //• Lista lediga tider GET /api/v5/availability
 
     //Administratörer ska kunna göra ett antal aktiviteter med följande endpoints:
-    String addVenue(Venue venue);
+    Venue addVenue(Venue venue);
     //• Lägga till bana POST /api/v5/addfield
-    String removeVenue(long id);
+    void removeVenue(long id);
 //• Ta bort en bana DELETE /api/v5/deletefield/{id}
-    String updateVenue(Venue venue);
+    Venue updateVenue(Venue venue);
 //• Uppdatera information för bana PUT /api/v5/updateinfo
 }
