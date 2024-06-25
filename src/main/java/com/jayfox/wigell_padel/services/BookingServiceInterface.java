@@ -10,5 +10,5 @@ Booking createNewBooking(Booking booking, String username);
 
 List<BookingVO> getMyBookings(String username);
 
-Booking updateBooking(long id,Booking booking,String username);
+Booking updateBooking(long id,Booking booking,String username) throws IllegalAccessException;
 }

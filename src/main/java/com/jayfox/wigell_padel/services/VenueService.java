@@ -24,7 +24,7 @@ public class VenueService implements VenueServiceInterface{
     private VenueRepository venueRepository;
     @Autowired
     private BookingRepository bookingRepository;
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+
 
     Logger logger = Logger.getLogger(VenueService.class);
 

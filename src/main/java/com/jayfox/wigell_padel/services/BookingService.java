@@ -2,6 +2,7 @@ package com.jayfox.wigell_padel.services;
 
 import com.jayfox.wigell_padel.BookingVO;
 import com.jayfox.wigell_padel.entities.Booking;
+import com.jayfox.wigell_padel.exceptions.IllegalAccessException;
 import com.jayfox.wigell_padel.exceptions.ResourceNotFoundException;
 import com.jayfox.wigell_padel.repositories.BookingRepository;
 import com.jayfox.wigell_padel.repositories.CustomerRepository;
@@ -33,7 +34,8 @@ public class BookingService implements BookingServiceInterface{
     public Booking createNewBooking(Booking booking, String username) {
         booking.setCustomer(customerRepository.findByUserName(username));
         logger.log(Level.WARN,"New booking created");
-        return bookingRepository.save(booking);
+        bookingRepository.save(booking);
+        return booking;
     }
 
     @Override
@@ -62,11 +64,8 @@ public class BookingService implements BookingServiceInterface{
         Optional<Booking> existingBooking = bookingRepository.findById(id);
         if(existingBooking.isPresent()){
             Booking bookingToUpdate = existingBooking.get();
-            if(!booking.getCustomer().getUserName().equals(username)){
-                return null;
-            }
-            if(booking.getCustomer()!=null){
-                bookingToUpdate.setCustomer(booking.getCustomer());
+            if(!existingBooking.get().getCustomer().getUserName().equals(username)){
+                 throw new IllegalAccessException(username);
             }
             if(booking.getVenue()!=null){
                 bookingToUpdate.setVenue(booking.getVenue());
@@ -77,7 +76,7 @@ public class BookingService implements BookingServiceInterface{
             bookingToUpdate.setEndTime(booking.getEndTime());
             bookingToUpdate.setTotalPlayers(booking.getTotalPlayers());
             bookingRepository.save(bookingToUpdate);
-            logger.log(Level.WARN,"Booking with id "+booking.getId()+" updated");
+            logger.log(Level.WARN,"Booking with id "+bookingToUpdate.getId()+" updated");
             return bookingToUpdate;
         } else throw new ResourceNotFoundException("Booking","id",id);
 
